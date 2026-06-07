@@ -7,11 +7,24 @@ function setMenuDisplay(newDisplay = "block") {
     menu.style.display = newDisplay;
 }
 
+const LETTRES = "abcdefghijklmnopqrstuvwxyz"
+
+function make_password(length = 12) {
+    let result = ""
+    for (let i = 0; i < length; i++) {
+        result += LETTRES[Math.floor(Math.random() * LETTRES.length)]
+
+    }
+    return result
+} 
+
 document.getElementById("passwd_btn").addEventListener("click", function() {
-    // Générer un mot de passe aléatoire
+    const PASSWORD_LENGTH = parseInt(document.getElementById("pass_length").value);
+    const newPassword = make_password(PASSWORD_LENGTH);
+    document.getElementById("passwd").value = newPassword;
 });
 
-document.getElementById("setting_btn").addEventListener("click", function() {
+document.getElementById("settings_btn").addEventListener("click", function() {
     setMenuDisplay("block");
 });
 
