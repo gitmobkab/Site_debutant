@@ -1,42 +1,49 @@
-const minuscules = "abcdefghijklmnopqrstuvwxyz"
-const majuscules = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-const chiffres = "0123456789"
-const symboles = "!@#$%^&*()_+-=[]{}"
-const emojis = "\uD83D\uDE00\uD83D\uDE02\uD83D\uDD25\uD83D\uDC80\uD83C\uDF89"
-
-function make_password() {
-    let pool = ""
-
-    if (document.getElementById("minuscules").checked) pool += minuscules
-    if (document.getElementById("majuscules").checked) pool += majuscules
-    if (document.getElementById("chiffres").checked) pool += chiffres
-    if (document.getElementById("symboles").checked) pool += symboles
-    if (document.getElementById("emojis").checked) pool += emojis
-
-    if (pool === "") {
-        alert("Veuillez sélectionner au moins un type de caractère")
-        return
+function setMenuDisplay(newDisplay = "block") {
+    const menu = document.getElementById("menu_overlay");
+    const oldDisplay = menu.style.display;
+    if (oldDisplay === newDisplay) {
+        return;
     }
+    menu.style.display = newDisplay;
+}
 
-    let nombre = parseInt(document.getElementById("pass_length").value)
-    if (isNaN(nombre)) {
-        alert("Veuillez entrer un nombre de caractères valide")
-        return
-    }
+const LETTRES = "abcdefghijklmnopqrstuvwxyz"
+const LETTRES_majusule ="ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
+function make_password(length = 12 , include_uppercase = false) {
     let result = ""
-    for (let i = 0; i < nombre; i++) {
+    
+    let pool = LETTRES
+    
+    if (include_uppercase==true) {
+   
+        pool += LETTRES_majusule 
+    }
+    for (let i = 0; i < length; i++) {
         result += pool[Math.floor(Math.random() * pool.length)]
-    }
 
-    document.getElementById("passwd").value = result
-}
-
-function display_option() {
-    let overlay = document.getElementById("menu_overlay")
-    if (overlay.style.display === "none") {
-        overlay.style.display = "flex"
-    } else {
-        overlay.style.display = "none"
     }
-}
+    return result
+} 
+
+document.getElementById("passwd_btn").addEventListener("click", function() {
+    const PASSWORD_LENGTH = parseInt(document.getElementById("pass_length").value);
+    const newPassword = make_password(PASSWORD_LENGTH);
+    document.getElementById("passwd").value = newPassword;
+});
+
+document.getElementById("settings_btn").addEventListener("click", function() {
+    setMenuDisplay("block");
+});
+
+document.getElementById("close_btn").addEventListener("click", function() {
+    setMenuDisplay("none");
+});
+
+document.getElementById("menu_overlay").addEventListener("click", function(event) {
+    const menu = document.getElementById("settings_menu");
+    if (!menu.contains(event.target)) {
+        setMenuDisplay("none");
+        console.debug("Clicked outside the menu, closing it.");
+    }
+});
