@@ -1,0 +1,2 @@
+# pour que git ne suit pas le dossier .vscode/
+.vscode/
